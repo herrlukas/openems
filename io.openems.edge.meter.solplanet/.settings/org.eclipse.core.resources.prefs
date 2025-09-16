@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/io/openems/edge/meter/solplanet/Config.java=UTF-8
+encoding//src/io/openems/edge/meter/solplanet/MeterSolplanet.java=UTF-8
+encoding//src/io/openems/edge/meter/solplanet/MeterSolplanetImpl.java=UTF-8
+encoding//test/io/openems/edge/meter/solplanet/MeterSolplanetImplTest.java=UTF-8
+encoding//test/io/openems/edge/meter/solplanet/MyConfig.java=UTF-8
+encoding/<project>=UTF-8
+encoding/bnd.bnd=UTF-8
+encoding/readme.adoc=UTF-8
