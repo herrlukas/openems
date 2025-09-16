@@ -113,9 +113,8 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent implements Mete
 			} catch (OpenemsNamedException e) {
 				this.logDebug(this.log, e.getMessage());
 			}
-			
-			this._setActivePower(activePower);
 		}
-		
+
+		this._setActivePower(activePower);
 	}
 }

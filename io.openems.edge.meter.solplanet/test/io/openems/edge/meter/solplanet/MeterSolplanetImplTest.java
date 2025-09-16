@@ -7,6 +7,7 @@ import org.junit.Test;
 import io.openems.edge.common.test.AbstractComponentTest.TestCase;
 import io.openems.edge.meter.api.ElectricityMeter;
 import io.openems.common.types.MeterType;
+import io.openems.edge.bridge.http.api.HttpError;
 import io.openems.edge.bridge.http.api.HttpResponse;
 import io.openems.edge.bridge.http.dummy.DummyBridgeHttpBundle;
 import io.openems.edge.common.test.ComponentTest;
@@ -43,7 +44,14 @@ public class MeterSolplanetImplTest {
 							httpTestBundle.triggerNextCycle();
 						}) //
 						.onAfterProcessImage(() -> assertEquals("L:403 W", sut.debugLog()))
-						.output(ElectricityMeter.ChannelId.ACTIVE_POWER, 403) )//
+						.output(ElectricityMeter.ChannelId.ACTIVE_POWER, 403))//
+				.next(new TestCase("Invalid read response")
+						.onBeforeProcessImage(() -> {
+							httpTestBundle.forceNextFailedResult(HttpError.ResponseError.notFound());
+							httpTestBundle.triggerNextCycle();
+						}) //
+						.onAfterProcessImage(() -> assertEquals("L:UNDEFINED", sut.debugLog()))
+						.output(ElectricityMeter.ChannelId.ACTIVE_POWER, null)) //
 				.deactivate();
 	}
 
