@@ -33,8 +33,6 @@ import io.openems.edge.common.component.AbstractOpenemsComponent;
 import io.openems.edge.common.component.OpenemsComponent;
 import io.openems.edge.common.event.EdgeEventConstants;
 import io.openems.edge.meter.api.ElectricityMeter;
-import io.openems.edge.timedata.api.Timedata;
-import io.openems.edge.timedata.api.TimedataProvider;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(//
@@ -46,14 +44,11 @@ import io.openems.edge.timedata.api.TimedataProvider;
 		EdgeEventConstants.TOPIC_CYCLE_BEFORE_PROCESS_IMAGE, //
 })
 public class MeterSolplanetImpl extends AbstractOpenemsComponent 
-	implements MeterSolplanet, ElectricityMeter, OpenemsComponent, TimedataProvider, EventHandler {
+	implements MeterSolplanet, ElectricityMeter, OpenemsComponent, EventHandler {
 
 	private Config config = null;
 
 	private final Logger log = LoggerFactory.getLogger(MeterSolplanetImpl.class);
-	
-	@Reference(policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.OPTIONAL)
-	private volatile Timedata timedata;
 	
 	@Reference()
 	private BridgeHttpFactory httpBridgeFactory;
@@ -76,7 +71,7 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 		this.httpBridge = this.httpBridgeFactory.get();
 		
 		if (this.isEnabled()) {
-			String url = "http://" + this.config.ip() + "/getdevdata.cgi?device=4&sn=" + this.config.sn();
+			String url = "http://" + this.config.ip() + ":8484/getdevdata.cgi?device=3&sn=" + this.config.sn();
 			this.httpBridge.subscribeJsonEveryCycle(url , this::processHttpResult);
 		}
 	}
@@ -125,10 +120,5 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 	@Override 
 	public MeterType getMeterType() {
 		return this.config.type();
-	}
-
-	@Override
-	public Timedata getTimedata() {
-		return this.timedata;
 	}
 }
