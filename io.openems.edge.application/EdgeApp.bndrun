@@ -48,6 +48,7 @@
 	bnd.identity;id='io.openems.edge.batteryinverter.kaco.blueplanetgridsave',\
 	bnd.identity;id='io.openems.edge.batteryinverter.refu88k',\
 	bnd.identity;id='io.openems.edge.batteryinverter.sinexcel',\
+	bnd.identity;id='io.openems.edge.batteryinverter.solplanet',\
 	bnd.identity;id='io.openems.edge.bosch.bpts5hybrid',\
 	bnd.identity;id='io.openems.edge.bridge.http',\
 	bnd.identity;id='io.openems.edge.bridge.mbus',\
@@ -459,4 +460,5 @@
 	reactive-streams;version='[1.0.4,1.0.5)',\
 	rrd4j;version='[3.9.0,3.9.1)',\
 	stax2-api;version='[4.2.2,4.2.3)',\
-	io.openems.edge.meter.solplanet;version=snapshot
+	io.openems.edge.meter.solplanet;version=snapshot,\
+	io.openems.edge.batteryinverter.solplanet;version=snapshot
