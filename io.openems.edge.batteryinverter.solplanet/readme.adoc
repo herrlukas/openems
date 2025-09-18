@@ -1,3 +1,0 @@
-= io.openems.edge.batteryinverter.solplanet
-
-https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.batteryinverter.solplanet[Source Code icon:github[]]
