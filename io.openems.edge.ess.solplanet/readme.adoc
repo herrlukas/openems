@@ -1,0 +1,3 @@
+= io.openems.edge.ess.solplanet
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.ess.solplanet[Source Code icon:github[]]
