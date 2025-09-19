@@ -11,7 +11,6 @@ import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.event.Event;
-import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.event.propertytypes.EventTopics;
 import org.osgi.service.metatype.annotations.Designate;
@@ -32,7 +31,7 @@ import io.openems.edge.ess.api.SymmetricEss;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(//
-		name = "io.openems.edge.ess.solplanet", //
+		name = "Ess.Solplanet", //
 		immediate = true, //
 		configurationPolicy = ConfigurationPolicy.REQUIRE //
 )
@@ -72,6 +71,8 @@ public class EssSolplanetImpl extends AbstractOpenemsComponent implements EssSol
 
 	@Deactivate
 	protected void deactivate() {
+		this.httpBridgeFactory.unget(this.httpBridge);
+		this.httpBridge = null;
 		super.deactivate();
 	}
 
@@ -89,7 +90,7 @@ public class EssSolplanetImpl extends AbstractOpenemsComponent implements EssSol
 
 	@Override
 	public String debugLog() {
-		return "Hello World";
+		return "SoC:" + this.getSoc() + "|L:" + this.getActivePower();
 	}
 	
 	private void processHttpResult(HttpResponse<JsonElement> result, HttpError error) {

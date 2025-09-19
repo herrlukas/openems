@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import io.openems.edge.common.test.AbstractComponentTest.TestCase;
 import io.openems.edge.meter.api.ElectricityMeter;
-import io.openems.common.types.MeterType;
 import io.openems.edge.bridge.http.api.HttpError;
 import io.openems.edge.bridge.http.api.HttpResponse;
 import io.openems.edge.bridge.http.dummy.DummyBridgeHttpBundle;
@@ -24,7 +23,6 @@ public class MeterSolplanetImplTest {
 						.setId("meter0") //
 						.setIp("127.0.0.1") //
 						.setSN("xxx") //
-						.setType(MeterType.GRID) //
 						.build()) //
 				.next(new TestCase("Successful read response") //
 						.onBeforeProcessImage(() -> {

@@ -52,8 +52,8 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent implements
 	public PvInverterSolplanetImpl() {
 		super(//
 				OpenemsComponent.ChannelId.values(), //
-				ElectricityMeter.ChannelId.values(),
 				ManagedSymmetricPvInverter.ChannelId.values(), //
+				ElectricityMeter.ChannelId.values(), //
 				PvInverterSolplanet.ChannelId.values() //
 		);
 	}
@@ -73,6 +73,8 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent implements
 
 	@Deactivate
 	protected void deactivate() {
+		this.httpBridgeFactory.unget(this.httpBridge);
+		this.httpBridge = null;
 		super.deactivate();
 	}
 
@@ -107,6 +109,6 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent implements
 
 	@Override
 	public String debugLog() {
-		return "Hello World";
+		return "Production:" + this.getActivePower();
 	}
 }

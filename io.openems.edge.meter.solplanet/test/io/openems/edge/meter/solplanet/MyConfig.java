@@ -10,7 +10,6 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 		private String id;
 		private String ip;
 		private String sn;
-		private MeterType type;
 
 		private Builder() {
 		}
@@ -27,11 +26,6 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 		
 		public Builder setSN(String sn) {
 			this.sn = sn;
-			return this;
-		}
-		
-		public Builder setType(MeterType type) {
-			this.type = type;
 			return this;
 		}
 
@@ -65,10 +59,4 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 	public String sn() {
 		return this.builder.sn;
 	}
-	
-	@Override
-	public MeterType type() {
-		return this.builder.type;
-	}
-
 }
