@@ -10,6 +10,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.event.propertytypes.EventTopics;
@@ -29,6 +32,8 @@ import io.openems.edge.common.component.AbstractOpenemsComponent;
 import io.openems.edge.common.component.OpenemsComponent;
 import io.openems.edge.common.event.EdgeEventConstants;
 import io.openems.edge.meter.api.ElectricityMeter;
+import io.openems.edge.timedata.api.Timedata;
+import io.openems.edge.timedata.api.TimedataProvider;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(//
@@ -40,11 +45,14 @@ import io.openems.edge.meter.api.ElectricityMeter;
 		EdgeEventConstants.TOPIC_CYCLE_BEFORE_PROCESS_IMAGE, //
 })
 public class MeterSolplanetImpl extends AbstractOpenemsComponent 
-	implements MeterSolplanet, ElectricityMeter, OpenemsComponent, EventHandler {
+	implements MeterSolplanet, ElectricityMeter, OpenemsComponent, TimedataProvider, EventHandler {
 
 	private Config config = null;
 
 	private final Logger log = LoggerFactory.getLogger(MeterSolplanetImpl.class);
+	
+	@Reference(policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.OPTIONAL)
+	private volatile Timedata timedata;
 	
 	@Reference()
 	private BridgeHttpFactory httpBridgeFactory;
@@ -116,5 +124,10 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 	@Override 
 	public MeterType getMeterType() {
 		return MeterType.GRID;
+	}
+
+	@Override
+	public Timedata getTimedata() {
+		return this.timedata;
 	}
 }
