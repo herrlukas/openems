@@ -34,6 +34,7 @@ import io.openems.edge.meter.api.ElectricityMeter;
 import io.openems.edge.pvinverter.api.ManagedSymmetricPvInverter;
 import io.openems.edge.timedata.api.Timedata;
 import io.openems.edge.timedata.api.TimedataProvider;
+import io.openems.edge.timedata.api.utils.CalculateEnergyFromPower;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(//
@@ -50,6 +51,9 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 	private Config config = null;
 
 	private final Logger log = LoggerFactory.getLogger(PvInverterSolplanetImpl.class);
+	
+	private final CalculateEnergyFromPower calculateActualEnergy = new CalculateEnergyFromPower(this,
+			ElectricityMeter.ChannelId.ACTIVE_PRODUCTION_ENERGY);
 	
 	@Reference(policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.OPTIONAL)
 	private volatile Timedata timedata;
@@ -94,7 +98,7 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 		}
 		switch (event.getTopic()) {
 		case EdgeEventConstants.TOPIC_CYCLE_BEFORE_PROCESS_IMAGE:
-			// TODO: fill channels
+			this.calculateEnergy();
 			break;
 		}
 	}
@@ -114,6 +118,18 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 		}
 		
 		this._setActivePower(activePower);
+	}
+	
+	private void calculateEnergy() {
+		var activePower = this.getActivePower().orElse(null);
+		
+		if (activePower == null) {
+			this.calculateActualEnergy.update(null);
+		} else if (activePower > 0) {
+			this.calculateActualEnergy.update(activePower);
+		} else {
+			this.calculateActualEnergy.update(0);
+		}
 	}
 
 	@Override

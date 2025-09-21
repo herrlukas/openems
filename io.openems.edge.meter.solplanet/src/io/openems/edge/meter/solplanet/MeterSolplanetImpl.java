@@ -34,6 +34,7 @@ import io.openems.edge.common.event.EdgeEventConstants;
 import io.openems.edge.meter.api.ElectricityMeter;
 import io.openems.edge.timedata.api.Timedata;
 import io.openems.edge.timedata.api.TimedataProvider;
+import io.openems.edge.timedata.api.utils.CalculateEnergyFromPower;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(//
@@ -50,6 +51,11 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 	private Config config = null;
 
 	private final Logger log = LoggerFactory.getLogger(MeterSolplanetImpl.class);
+	
+	private final CalculateEnergyFromPower calculateProductionEnergy = new CalculateEnergyFromPower(this,
+			ElectricityMeter.ChannelId.ACTIVE_PRODUCTION_ENERGY);
+	private final CalculateEnergyFromPower calculateConsumptionEnergy = new CalculateEnergyFromPower(this,
+			ElectricityMeter.ChannelId.ACTIVE_CONSUMPTION_ENERGY);
 	
 	@Reference(policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.OPTIONAL)
 	private volatile Timedata timedata;
@@ -94,7 +100,7 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 		}
 		switch (event.getTopic()) {
 		case EdgeEventConstants.TOPIC_CYCLE_BEFORE_PROCESS_IMAGE:
-			// TODO: fill channels
+			this.calculateEnergy();
 			break;
 		}
 	}
@@ -119,6 +125,24 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 		}
 
 		this._setActivePower(activePower);
+	}
+	
+	private void calculateEnergy() {
+		 Integer activePower = this.getActivePower().orElse(null);
+		 
+		 if(activePower == null) {
+			 // Not available
+			 this.calculateProductionEnergy.update(null);
+			 this.calculateConsumptionEnergy.update(null);
+		 } else if (activePower > 0) {
+			 // Buy-From-Grid
+			 this.calculateProductionEnergy.update(activePower);
+			 this.calculateConsumptionEnergy.update(0);
+		 } else {
+			 // Sell-To-Grid 
+			 this.calculateProductionEnergy.update(0);
+			 this.calculateConsumptionEnergy.update(-activePower);
+		 }
 	}
 	
 	@Override 
