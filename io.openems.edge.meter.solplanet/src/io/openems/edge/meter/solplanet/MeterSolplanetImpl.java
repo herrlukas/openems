@@ -104,11 +104,6 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 			break;
 		}
 	}
-
-	@Override
-	public String debugLog() {
-		return "L:" + this.getActivePower().asString();
-	}
 	
 	private void processHttpResult(HttpResponse<JsonElement> result, HttpError error) {
 		Integer activePower = null;
@@ -143,6 +138,11 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 			 this.calculateProductionEnergy.update(0);
 			 this.calculateConsumptionEnergy.update(-activePower);
 		 }
+	}
+	
+	@Override
+	public String debugLog() {
+		return "L:" + this.getActivePower().asString();
 	}
 	
 	@Override 

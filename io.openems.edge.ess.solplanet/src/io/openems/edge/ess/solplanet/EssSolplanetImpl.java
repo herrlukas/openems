@@ -108,11 +108,6 @@ public class EssSolplanetImpl extends AbstractOpenemsComponent
 			break;
 		}
 	}
-
-	@Override
-	public String debugLog() {
-		return "SoC:" + this.getSoc() + "|L:" + this.getActivePower();
-	}
 	
 	private void processHttpResult(HttpResponse<JsonElement> result, HttpError error) {
 		Integer activePower = null;
@@ -158,6 +153,11 @@ public class EssSolplanetImpl extends AbstractOpenemsComponent
 				this.calculateDcDischargeEnergy.update(0);
 			}
 		}
+	}
+	
+	@Override
+	public String debugLog() {
+		return "SoC:" + this.getSoc() + "|L:" + this.getActivePower();
 	}
 
 	@Override
