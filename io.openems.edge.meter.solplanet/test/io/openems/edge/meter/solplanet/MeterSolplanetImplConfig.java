@@ -4,7 +4,7 @@ import io.openems.common.test.AbstractComponentConfig;
 import io.openems.common.types.MeterType;
 
 @SuppressWarnings("all")
-public class MyConfig extends AbstractComponentConfig implements Config {
+public class MeterSolplanetImplConfig extends AbstractComponentConfig implements Config {
 
 	protected static class Builder {
 		private String id;
@@ -29,8 +29,8 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 			return this;
 		}
 
-		public MyConfig build() {
-			return new MyConfig(this);
+		public MeterSolplanetImplConfig build() {
+			return new MeterSolplanetImplConfig(this);
 		}
 	}
 
@@ -45,7 +45,7 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 
 	private final Builder builder;
 
-	private MyConfig(Builder builder) {
+	private MeterSolplanetImplConfig(Builder builder) {
 		super(Config.class, builder.id);
 		this.builder = builder;
 	}

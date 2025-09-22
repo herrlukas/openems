@@ -19,7 +19,7 @@ public class MeterSolplanetImplTest {
 		final var httpTestBundle = new DummyBridgeHttpBundle();
 		new ComponentTest(sut) //
 				.addReference("httpBridgeFactory", httpTestBundle.factory()) //
-				.activate(MyConfig.create() //
+				.activate(MeterSolplanetImplConfig.create() //
 						.setId("meter0") //
 						.setIp("127.0.0.1") //
 						.setSN("xxx") //

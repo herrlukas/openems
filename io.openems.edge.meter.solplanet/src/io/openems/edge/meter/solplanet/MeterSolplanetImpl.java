@@ -82,7 +82,7 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 		
 		if (this.isEnabled()) {
 			String url = "http://" + this.config.ip() + ":8484/getdevdata.cgi?device=3&sn=" + this.config.sn();
-			this.httpBridge.subscribeJsonEveryCycle(url , this::processHttpResult);
+			this.httpBridge.subscribeJsonEveryCycle(url, this::processHttpResult);
 		}
 	}
 
@@ -125,7 +125,7 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 	private void calculateEnergy() {
 		 Integer activePower = this.getActivePower().orElse(null);
 		 
-		 if(activePower == null) {
+		 if (activePower == null) {
 			 // Not available
 			 this.calculateProductionEnergy.update(null);
 			 this.calculateConsumptionEnergy.update(null);

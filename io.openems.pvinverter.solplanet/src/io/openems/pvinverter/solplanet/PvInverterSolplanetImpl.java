@@ -80,7 +80,7 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 		
 		if (this.isEnabled()) {
 			String url = "http://" + this.config.ip() + ":8484/getdevdata.cgi?device=4&sn=" + this.config.sn();
-			this.httpBridge.subscribeJsonEveryCycle(url , this::processHttpResult);
+			this.httpBridge.subscribeJsonEveryCycle(url, this::processHttpResult);
 		}		
 	}
 

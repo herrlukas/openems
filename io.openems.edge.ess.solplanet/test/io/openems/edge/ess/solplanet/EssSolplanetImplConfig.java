@@ -1,9 +1,9 @@
-package io.openems.pvinverter.solplanet;
+package io.openems.edge.ess.solplanet;
 
 import io.openems.common.test.AbstractComponentConfig;
 
 @SuppressWarnings("all")
-public class MyConfig extends AbstractComponentConfig implements Config {
+public class EssSolplanetImplConfig extends AbstractComponentConfig implements Config {
 
 	protected static class Builder {
 		private String id;
@@ -24,12 +24,12 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 		}
 		
 		public Builder setSN(String sn) {
-		this.sn = sn;
-		return this;
-	}
+			this.sn = sn;
+			return this;
+		}
 
-		public MyConfig build() {
-			return new MyConfig(this);
+		public EssSolplanetImplConfig build() {
+			return new EssSolplanetImplConfig(this);
 		}
 	}
 
@@ -44,7 +44,7 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 
 	private final Builder builder;
 
-	private MyConfig(Builder builder) {
+	private EssSolplanetImplConfig(Builder builder) {
 		super(Config.class, builder.id);
 		this.builder = builder;
 	}
@@ -58,4 +58,6 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 	public String sn() {
 		return this.builder.sn;
 	}
+
+
 }

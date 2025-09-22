@@ -86,7 +86,7 @@ public class EssSolplanetImpl extends AbstractOpenemsComponent
 		
 		if (this.isEnabled()) {
 			String url = "http://" + this.config.ip() + ":8484/getdevdata.cgi?device=4&sn=" + this.config.sn();
-			this.httpBridge.subscribeJsonEveryCycle(url , this::processHttpResult);
+			this.httpBridge.subscribeJsonEveryCycle(url, this::processHttpResult);
 		}
 	}
 
@@ -132,26 +132,25 @@ public class EssSolplanetImpl extends AbstractOpenemsComponent
 	private void calculateEnergy() {
 		// Calculate AC Energy
 		var activePower = this.getActivePowerChannel().getNextValue().get();
+		
 		if (activePower == null) {
 			// Not available
 			this.calculateAcChargeEnergy.update(null);
 			this.calculateAcDischargeEnergy.update(null);
 			this.calculateDcChargeEnergy.update(null);
 			this.calculateDcDischargeEnergy.update(null);
-		} else {
-			if (activePower > 0) {
+		} else if (activePower > 0) {
 				// Discharge
 				this.calculateAcChargeEnergy.update(0);
 				this.calculateAcDischargeEnergy.update(activePower);
 				this.calculateDcChargeEnergy.update(0);
 				this.calculateDcDischargeEnergy.update(activePower);
-			} else {
-				// Charge
-				this.calculateAcChargeEnergy.update(activePower * -1);
-				this.calculateAcDischargeEnergy.update(0);
-				this.calculateDcChargeEnergy.update(activePower * -1);
-				this.calculateDcDischargeEnergy.update(0);
-			}
+		} else {
+			// Charge
+			this.calculateAcChargeEnergy.update(activePower * -1);
+			this.calculateAcDischargeEnergy.update(0);
+			this.calculateDcChargeEnergy.update(activePower * -1);
+			this.calculateDcDischargeEnergy.update(0);
 		}
 	}
 	
