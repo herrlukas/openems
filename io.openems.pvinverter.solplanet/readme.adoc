@@ -1,3 +1,0 @@
-= io.openems.pvinverter.solplanet
-
-https://github.com/OpenEMS/openems/tree/develop/io.openems.pvinverter.solplanet[Source Code icon:github[]]

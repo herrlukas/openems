@@ -1,9 +1,0 @@
-eclipse.preferences.version=1
-encoding//src/io/openems/pvinverter/solplanet/Config.java=UTF-8
-encoding//src/io/openems/pvinverter/solplanet/PvInverterSolplanet.java=UTF-8
-encoding//src/io/openems/pvinverter/solplanet/PvInverterSolplanetImpl.java=UTF-8
-encoding//test/io/openems/pvinverter/solplanet/PvInverterSolplanetImplConfig.java=UTF-8
-encoding//test/io/openems/pvinverter/solplanet/PvInverterSolplanetImplTest.java=UTF-8
-encoding/<project>=UTF-8
-encoding/bnd.bnd=UTF-8
-encoding/readme.adoc=UTF-8
