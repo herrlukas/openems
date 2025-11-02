@@ -32,6 +32,7 @@ import io.openems.edge.common.component.AbstractOpenemsComponent;
 import io.openems.edge.common.component.OpenemsComponent;
 import io.openems.edge.common.event.EdgeEventConstants;
 import io.openems.edge.meter.api.ElectricityMeter;
+import io.openems.edge.solplanet.common.Helpers;
 import io.openems.edge.timedata.api.Timedata;
 import io.openems.edge.timedata.api.TimedataProvider;
 import io.openems.edge.timedata.api.utils.CalculateEnergyFromPower;
@@ -81,8 +82,9 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 		this.httpBridge = this.httpBridgeFactory.get();
 		
 		if (this.isEnabled()) {
-			String url = "http://" + this.config.ip() + ":8484/getdevdata.cgi?device=3&sn=" + this.config.sn();
-			this.httpBridge.subscribeJsonEveryCycle(url, this::processHttpResult);
+			Helpers.disableCertificateValidation();
+			String url = Helpers.buildUrl(this.config.ip(), this.config.sn(), 3);
+			this.httpBridge.subscribeJsonCycle(10, url, this::processHttpResult);
 		}
 	}
 
