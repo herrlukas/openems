@@ -23,10 +23,11 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.JsonElement;
 
 import io.openems.common.exceptions.OpenemsError.OpenemsNamedException;
-import io.openems.edge.bridge.http.api.BridgeHttp;
-import io.openems.edge.bridge.http.api.BridgeHttpFactory;
-import io.openems.edge.bridge.http.api.HttpError;
-import io.openems.edge.bridge.http.api.HttpResponse;
+import io.openems.common.bridge.http.api.BridgeHttp;
+import io.openems.common.bridge.http.api.BridgeHttpFactory;
+import io.openems.common.bridge.http.api.HttpError;
+import io.openems.common.bridge.http.api.HttpResponse;
+import io.openems.edge.bridge.http.cycle.HttpBridgeCycleServiceDefinition;
 import io.openems.edge.common.component.AbstractOpenemsComponent;
 import io.openems.edge.common.component.OpenemsComponent;
 import io.openems.edge.common.event.EdgeEventConstants;
@@ -59,9 +60,11 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 	@Reference(policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.OPTIONAL)
 	private volatile Timedata timedata;
 	
-	@Reference()
+	@Reference
 	private BridgeHttpFactory httpBridgeFactory;
 	private BridgeHttp httpBridge;
+	@Reference
+	private HttpBridgeCycleServiceDefinition httpBridgeCycleServiceDefinition;
 	
 	public PvInverterSolplanetImpl() {
 		super(//
@@ -82,7 +85,9 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 		if (this.isEnabled()) {
 			Helpers.disableCertificateValidation();
 			String url = Helpers.buildUrl(this.config.ip(), this.config.sn(), 4);
-			this.httpBridge.subscribeJsonCycle(10, url, this::processHttpResult);
+			final var cycleService = this.httpBridge.createService(this.httpBridgeCycleServiceDefinition);
+			
+			cycleService.subscribeJsonCycle(10, url, this::processHttpResult);
 		}		
 	}
 
@@ -105,7 +110,7 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 		}
 	}
 	
-	private void processHttpResult(HttpResponse<JsonElement> result, HttpError error) {
+	private void processHttpResult(HttpResponse<JsonElement> result, HttpError error) {		
 		Integer activePower = null;
 		
 		if (error != null) {
