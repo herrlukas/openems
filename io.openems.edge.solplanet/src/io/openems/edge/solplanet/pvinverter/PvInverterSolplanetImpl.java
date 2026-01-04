@@ -13,8 +13,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.event.propertytypes.EventTopics;
 import org.osgi.service.metatype.annotations.Designate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.openems.edge.common.component.AbstractOpenemsComponent;
 import io.openems.edge.common.component.OpenemsComponent;
@@ -82,15 +80,7 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 	}
 	
 	private void updateChannels() {		
-		
-		if (this.core == null) {
-			System.out.println("Core: Null");
-		}
-		
 		SolplanetData spData = this.core.getSPData();
-		
-		System.out.println(spData.pvPower);
-		
 		this._setActivePower(spData.pvPower);
 	}
 	

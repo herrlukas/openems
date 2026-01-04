@@ -16,12 +16,6 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 	@AttributeDefinition(name = "Is enabled?", description = "Is this Component enabled?")
 	boolean enabled() default true;
-	
-	@AttributeDefinition(name = "IP-Address", description = "The IP address of the AI-Dongel")
-	String ip();
-	
-	@AttributeDefinition(name = "Serialnumber", description = "The serialnumber of the inverter")
-	String sn();
 
 	String webconsole_configurationFactory_nameHint() default "Solplanet Ess [{id}]";
 

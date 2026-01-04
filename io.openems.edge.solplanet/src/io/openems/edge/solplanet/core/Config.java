@@ -4,7 +4,7 @@ import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 @ObjectClassDefinition(//
-		name = "io.openems.edge.solplanet.core", //
+		name = "Solplanet Core", //
 		description = "")
 @interface Config {
 
