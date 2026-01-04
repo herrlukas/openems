@@ -4,6 +4,14 @@ import static io.openems.common.utils.JsonUtils.getAsInt;
 import static io.openems.common.utils.JsonUtils.getAsJsonObject;
 import static java.lang.Math.round;
 
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -28,7 +36,6 @@ import io.openems.edge.bridge.http.cycle.HttpBridgeCycleServiceDefinition;
 import io.openems.edge.common.component.AbstractOpenemsComponent;
 import io.openems.edge.common.component.OpenemsComponent;
 import io.openems.edge.common.event.EdgeEventConstants;
-import io.openems.edge.solplanet.common.Helpers;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(//
@@ -73,12 +80,12 @@ public class SolplanetCoreImpl extends AbstractOpenemsComponent implements Solpl
 		
 		this.spData = new SolplanetData();
 		
-		Helpers.disableCertificateValidation();
-		String url = Helpers.buildUrl(this.config.ip(), this.config.sn(), 4);
+		this.disableCertificateValidation();
+		String url = this.buildURL(4);
 		final var cycleService = this.httpBridge.createService(this.httpBridgeCycleServiceDefinition);
 		cycleService.subscribeJsonCycle(10, url, this::processHttpResultInvEss);
 		
-		url = Helpers.buildUrl(this.config.ip(), this.config.sn(), 4);
+		url = this.buildURL(4);
 		cycleService.subscribeJsonCycle(10, url, this::processHttpResultGrid);
 	}
 
@@ -133,6 +140,37 @@ public class SolplanetCoreImpl extends AbstractOpenemsComponent implements Solpl
 		}
 		
 		this.spData.gridPower = gridPower;
+	}
+	
+	private String buildURL(Integer device) {
+		String url = "https://" 
+				+ this.config.ip() 
+				+ ":443/getdevdata.cgi?device=" 
+				+ device 
+				+ "&sn=" 
+				+ this.config.sn();
+		return url;
+	}
+	
+	private void disableCertificateValidation() {
+	    try {
+	        TrustManager[] trustAllCerts = new TrustManager[]{
+	            new X509TrustManager() {
+	                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+	                public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+	                public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+	            }
+	        };
+
+	        SSLContext sc = SSLContext.getInstance("SSL");
+	        sc.init(null, trustAllCerts, new SecureRandom());
+	        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+	        // Disable hostname verification
+	        HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 	public SolplanetData getSPData() {
