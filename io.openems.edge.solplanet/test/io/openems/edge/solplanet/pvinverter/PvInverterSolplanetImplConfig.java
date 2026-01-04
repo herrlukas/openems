@@ -1,18 +1,25 @@
 package io.openems.edge.solplanet.pvinverter;
 
 import io.openems.common.test.AbstractComponentConfig;
+import io.openems.common.utils.ConfigUtils;
 
 @SuppressWarnings("all")
 public class PvInverterSolplanetImplConfig extends AbstractComponentConfig implements Config {
 
 	protected static class Builder {
 		private String id;
+		private String coreId;
 
 		private Builder() {
 		}
 
 		public Builder setId(String id) {
 			this.id = id;
+			return this;
+		}
+		
+		public Builder setCoreId(String coreId) {
+			this.coreId = coreId;
 			return this;
 		}
 
@@ -35,5 +42,15 @@ public class PvInverterSolplanetImplConfig extends AbstractComponentConfig imple
 	private PvInverterSolplanetImplConfig(Builder builder) {
 		super(Config.class, builder.id);
 		this.builder = builder;
+	}
+	
+	@Override
+	public String core_id() {
+		return this.builder.coreId;
+	}
+
+	@Override
+	public String core_target() {
+		return ConfigUtils.generateReferenceTargetFilter(this.id(), this.core_id());
 	}
 }

@@ -85,7 +85,7 @@ public class CoreSolplanetImpl extends AbstractOpenemsComponent implements CoreS
 		final var cycleService = this.httpBridge.createService(this.httpBridgeCycleServiceDefinition);
 		cycleService.subscribeJsonCycle(10, url, this::processHttpResultInvEss);
 		
-		url = this.buildURL(4);
+		url = this.buildURL(3);
 		cycleService.subscribeJsonCycle(10, url, this::processHttpResultGrid);
 	}
 

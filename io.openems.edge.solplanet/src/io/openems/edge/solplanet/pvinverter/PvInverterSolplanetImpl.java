@@ -1,5 +1,6 @@
 package io.openems.edge.solplanet.pvinverter;
 
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -40,6 +41,9 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 	private final CalculateEnergyFromPower calculateActualEnergy = new CalculateEnergyFromPower(this,
 			ElectricityMeter.ChannelId.ACTIVE_PRODUCTION_ENERGY);
 	
+	@Reference
+	private ConfigurationAdmin cm;
+	
 	@Reference(policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.OPTIONAL)
 	private volatile Timedata timedata;
 	
@@ -58,6 +62,10 @@ public class PvInverterSolplanetImpl extends AbstractOpenemsComponent
 	@Activate
 	private void activate(ComponentContext context, Config config) {
 		super.activate(context, config.id(), config.alias(), config.enabled());	
+		// update filter for 'Core'
+		if (OpenemsComponent.updateReferenceFilter(this.cm, this.servicePid(), "core", config.core_id())) {
+			return;
+		}
 	}
 
 	@Deactivate
