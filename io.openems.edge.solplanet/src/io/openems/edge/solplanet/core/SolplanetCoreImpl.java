@@ -76,7 +76,10 @@ public class SolplanetCoreImpl extends AbstractOpenemsComponent implements Solpl
 		Helpers.disableCertificateValidation();
 		String url = Helpers.buildUrl(this.config.ip(), this.config.sn(), 4);
 		final var cycleService = this.httpBridge.createService(this.httpBridgeCycleServiceDefinition);
-		cycleService.subscribeJsonCycle(10, url, this::processHttpResult);
+		cycleService.subscribeJsonCycle(10, url, this::processHttpResultInvEss);
+		
+		url = Helpers.buildUrl(this.config.ip(), this.config.sn(), 4);
+		cycleService.subscribeJsonCycle(10, url, this::processHttpResultGrid);
 	}
 
 	@Deactivate
@@ -93,7 +96,7 @@ public class SolplanetCoreImpl extends AbstractOpenemsComponent implements Solpl
 		}
 	}
 	
-	private void processHttpResult(HttpResponse<JsonElement> result, HttpError error) {	
+	private void processHttpResultInvEss(HttpResponse<JsonElement> result, HttpError error) {	
 		
 		Integer pvPower = null, essPower = null, essSoc = null;
 		
@@ -110,7 +113,26 @@ public class SolplanetCoreImpl extends AbstractOpenemsComponent implements Solpl
 			}
 		}
 		
-		this.spData.set(pvPower, essPower, essSoc);
+		this.spData.pvPower = pvPower;
+		this.spData.essPower = essPower;
+		this.spData.essSoc = essSoc;
+	}
+	
+	private void processHttpResultGrid(HttpResponse<JsonElement> result, HttpError error) {
+		Integer gridPower = null;
+		
+		if (error != null) {
+			this.logDebug(this.log, error.getMessage());
+		} else {
+			try {
+				var response = getAsJsonObject(result.data());
+				gridPower = round(getAsInt(response, "pac"));
+			} catch (OpenemsNamedException e) {
+				this.logDebug(this.log, e.getMessage());
+			}
+		}
+		
+		this.spData.gridPower = gridPower;
 	}
 	
 	public SolplanetData getSPData() {
@@ -118,7 +140,15 @@ public class SolplanetCoreImpl extends AbstractOpenemsComponent implements Solpl
 	}
 
 	@Override
-	public String debugLog() {
-		return "Production:" + this.spData.pvPower + "|SoC:" + this.spData.essSoc + "|L:" + this.spData.essPower;
+	public String debugLog() {	
+		return "Ess SoC:" 
+				+ this.spData.essSoc 
+				+ " %|L:" 
+				+ this.spData.essPower 
+				+ " W Grid:" 
+				+ this.spData.gridPower 
+				+ " W Production:" 
+				+ this.spData.pvPower 
+				+ " W";
 	}
 }

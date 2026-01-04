@@ -1,9 +1,5 @@
 package io.openems.edge.solplanet.gridmeter;
 
-import static io.openems.common.utils.JsonUtils.getAsJsonObject;
-import static io.openems.common.utils.JsonUtils.getAsInt;
-import static java.lang.Math.round;
-
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -17,23 +13,15 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.event.propertytypes.EventTopics;
 import org.osgi.service.metatype.annotations.Designate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.gson.JsonElement;
 
-import io.openems.common.exceptions.OpenemsError.OpenemsNamedException;
 import io.openems.common.types.MeterType;
-import io.openems.common.bridge.http.api.BridgeHttp;
-import io.openems.common.bridge.http.api.BridgeHttpFactory;
-import io.openems.common.bridge.http.api.HttpError;
-import io.openems.common.bridge.http.api.HttpResponse;
-import io.openems.edge.bridge.http.cycle.HttpBridgeCycleServiceDefinition;
 import io.openems.edge.common.component.AbstractOpenemsComponent;
 import io.openems.edge.common.component.OpenemsComponent;
 import io.openems.edge.common.event.EdgeEventConstants;
 import io.openems.edge.meter.api.ElectricityMeter;
-import io.openems.edge.solplanet.common.Helpers;
+import io.openems.edge.solplanet.core.SolplanetCore;
+import io.openems.edge.solplanet.core.SolplanetData;
 import io.openems.edge.timedata.api.Timedata;
 import io.openems.edge.timedata.api.TimedataProvider;
 import io.openems.edge.timedata.api.utils.CalculateEnergyFromPower;
@@ -49,10 +37,6 @@ import io.openems.edge.timedata.api.utils.CalculateEnergyFromPower;
 })
 public class MeterSolplanetImpl extends AbstractOpenemsComponent 
 	implements MeterSolplanet, ElectricityMeter, OpenemsComponent, TimedataProvider, EventHandler {
-
-	private Config config = null;
-
-	private final Logger log = LoggerFactory.getLogger(MeterSolplanetImpl.class);
 	
 	private final CalculateEnergyFromPower calculateProductionEnergy = new CalculateEnergyFromPower(this,
 			ElectricityMeter.ChannelId.ACTIVE_PRODUCTION_ENERGY);
@@ -62,12 +46,8 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 	@Reference(policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.OPTIONAL)
 	private volatile Timedata timedata;
 	
-	@Reference
-	private BridgeHttpFactory httpBridgeFactory;
-	private BridgeHttp httpBridge;
-	@Reference
-	private HttpBridgeCycleServiceDefinition httpBridgeCycleServiceDefinition;
-
+	@Reference(policy = ReferencePolicy.STATIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.MANDATORY)
+	protected SolplanetCore core;
 	
 	public MeterSolplanetImpl() {
 		super(//
@@ -80,23 +60,10 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 	@Activate
 	private void activate(ComponentContext context, Config config) {
 		super.activate(context, config.id(), config.alias(), config.enabled());
-		
-		this.config = config;
-		this.httpBridge = this.httpBridgeFactory.get();
-		
-		if (this.isEnabled()) {
-			Helpers.disableCertificateValidation();
-			String url = Helpers.buildUrl(this.config.ip(), this.config.sn(), 3);
-			final var cycleService = this.httpBridge.createService(this.httpBridgeCycleServiceDefinition);
-			
-			cycleService.subscribeJsonCycle(10, url, this::processHttpResult);
-		}
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		this.httpBridgeFactory.unget(this.httpBridge);
-		this.httpBridge = null;
 		super.deactivate();
 	}
 
@@ -107,26 +74,15 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 		}
 		switch (event.getTopic()) {
 		case EdgeEventConstants.TOPIC_CYCLE_BEFORE_PROCESS_IMAGE:
+			this.updateChannels();
 			this.calculateEnergy();
 			break;
 		}
 	}
 	
-	private void processHttpResult(HttpResponse<JsonElement> result, HttpError error) {
-		Integer activePower = null;
-		
-		if (error != null) {
-			this.logDebug(this.log, error.getMessage());
-		} else {
-			try {
-				var response = getAsJsonObject(result.data());
-				activePower = round(getAsInt(response, "pac"));
-			} catch (OpenemsNamedException e) {
-				this.logDebug(this.log, e.getMessage());
-			}
-		}
-
-		this._setActivePower(activePower);
+	private void updateChannels() {		
+		SolplanetData spData = this.core.getSPData();
+		this._setActivePower(spData.gridPower);
 	}
 	
 	private void calculateEnergy() {
