@@ -7,8 +7,6 @@ public class PvInverterSolplanetImplConfig extends AbstractComponentConfig imple
 
 	protected static class Builder {
 		private String id;
-		private String ip;
-		private String sn;
 
 		private Builder() {
 		}
@@ -17,16 +15,6 @@ public class PvInverterSolplanetImplConfig extends AbstractComponentConfig imple
 			this.id = id;
 			return this;
 		}
-
-		public Builder setIp(String ip) {
-			this.ip = ip;
-			return this;
-		}
-		
-		public Builder setSN(String sn) {
-		this.sn = sn;
-		return this;
-	}
 
 		public PvInverterSolplanetImplConfig build() {
 			return new PvInverterSolplanetImplConfig(this);
@@ -47,15 +35,5 @@ public class PvInverterSolplanetImplConfig extends AbstractComponentConfig imple
 	private PvInverterSolplanetImplConfig(Builder builder) {
 		super(Config.class, builder.id);
 		this.builder = builder;
-	}
-
-	@Override
-	public String ip() {
-		return this.builder.ip;
-	}
-
-	@Override
-	public String sn() {
-		return this.builder.sn;
 	}
 }

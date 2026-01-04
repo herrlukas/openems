@@ -8,24 +8,12 @@ public class EssSolplanetImplConfig extends AbstractComponentConfig implements C
 
 	protected static class Builder {
 		private String id;
-		private String ip;
-		private String sn;
 
 		private Builder() {
 		}
 
 		public Builder setId(String id) {
 			this.id = id;
-			return this;
-		}
-
-		public Builder setIp(String ip) {
-			this.ip = ip;
-			return this;
-		}
-		
-		public Builder setSN(String sn) {
-			this.sn = sn;
 			return this;
 		}
 
@@ -49,16 +37,4 @@ public class EssSolplanetImplConfig extends AbstractComponentConfig implements C
 		super(Config.class, builder.id);
 		this.builder = builder;
 	}
-
-	@Override
-	public String ip() {
-		return this.builder.ip;
-	}
-
-	@Override
-	public String sn() {
-		return this.builder.sn;
-	}
-
-
 }
