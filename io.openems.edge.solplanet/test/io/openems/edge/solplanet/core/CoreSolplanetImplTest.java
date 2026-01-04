@@ -14,7 +14,7 @@ public class CoreSolplanetImplTest {
 		final var httpTestBundle = new DummyBridgeHttpBundle();
 		final var dummyCycleSubscriber = new DummyCycleSubscriber();
 				
-		new ComponentTest(new SolplanetCoreImpl()) //
+		new ComponentTest(new CoreSolplanetImpl()) //
 			.addReference("httpBridgeFactory", httpTestBundle.factory()) //
 			.addReference("httpBridgeCycleServiceDefinition",
 					new HttpBridgeCycleServiceDefinition(dummyCycleSubscriber)) //	

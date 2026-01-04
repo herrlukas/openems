@@ -1,7 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/io/openems/edge/solplanet/core/Config.java=UTF-8
-encoding//src/io/openems/edge/solplanet/core/SolplanetCore.java=UTF-8
-encoding//src/io/openems/edge/solplanet/core/SolplanetCoreImpl.java=UTF-8
+encoding//src/io/openems/edge/solplanet/core/CoreSolplanet.java=UTF-8
+encoding//src/io/openems/edge/solplanet/core/CoreSolplanetImpl.java=UTF-8
 encoding//src/io/openems/edge/solplanet/ess/Config.java=UTF-8
 encoding//src/io/openems/edge/solplanet/ess/EssSolplanet.java=UTF-8
 encoding//src/io/openems/edge/solplanet/ess/EssSolplanetImpl.java=UTF-8

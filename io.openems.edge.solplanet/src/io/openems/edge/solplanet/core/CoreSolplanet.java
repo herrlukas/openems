@@ -5,7 +5,7 @@ import org.osgi.service.event.EventHandler;
 import io.openems.edge.common.channel.Doc;
 import io.openems.edge.common.component.OpenemsComponent;
 
-public interface SolplanetCore extends OpenemsComponent, EventHandler {
+public interface CoreSolplanet extends OpenemsComponent, EventHandler {
 
 	public SolplanetData getSPData();
 	

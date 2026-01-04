@@ -20,7 +20,7 @@ import io.openems.edge.common.component.AbstractOpenemsComponent;
 import io.openems.edge.common.component.OpenemsComponent;
 import io.openems.edge.common.event.EdgeEventConstants;
 import io.openems.edge.meter.api.ElectricityMeter;
-import io.openems.edge.solplanet.core.SolplanetCore;
+import io.openems.edge.solplanet.core.CoreSolplanet;
 import io.openems.edge.solplanet.core.SolplanetData;
 import io.openems.edge.timedata.api.Timedata;
 import io.openems.edge.timedata.api.TimedataProvider;
@@ -47,7 +47,7 @@ public class MeterSolplanetImpl extends AbstractOpenemsComponent
 	private volatile Timedata timedata;
 	
 	@Reference(policy = ReferencePolicy.STATIC, policyOption = ReferencePolicyOption.GREEDY, cardinality = ReferenceCardinality.MANDATORY)
-	protected SolplanetCore core;
+	protected CoreSolplanet core;
 	
 	public MeterSolplanetImpl() {
 		super(//

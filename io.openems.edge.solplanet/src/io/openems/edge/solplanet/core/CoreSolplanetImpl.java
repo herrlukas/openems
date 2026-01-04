@@ -46,11 +46,11 @@ import io.openems.edge.common.event.EdgeEventConstants;
 @EventTopics({ //
 		EdgeEventConstants.TOPIC_CYCLE_BEFORE_PROCESS_IMAGE, //
 })
-public class SolplanetCoreImpl extends AbstractOpenemsComponent implements SolplanetCore, OpenemsComponent, EventHandler {
+public class CoreSolplanetImpl extends AbstractOpenemsComponent implements CoreSolplanet, OpenemsComponent, EventHandler {
 
 	private Config config = null;
 
-	private final Logger log = LoggerFactory.getLogger(SolplanetCoreImpl.class);
+	private final Logger log = LoggerFactory.getLogger(CoreSolplanetImpl.class);
 	
 	@Reference
 	private BridgeHttpFactory httpBridgeFactory;
@@ -60,10 +60,10 @@ public class SolplanetCoreImpl extends AbstractOpenemsComponent implements Solpl
 	
 	private SolplanetData spData = null;
 	
-	public SolplanetCoreImpl() {
+	public CoreSolplanetImpl() {
 		super(//
 				OpenemsComponent.ChannelId.values(), //
-				SolplanetCore.ChannelId.values() //
+				CoreSolplanet.ChannelId.values() //
 		);
 	}
 
