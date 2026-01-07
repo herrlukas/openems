@@ -106,20 +106,14 @@ public class EssSolplanetImpl extends AbstractOpenemsComponent
 			// Not available
 			this.calculateAcChargeEnergy.update(null);
 			this.calculateAcDischargeEnergy.update(null);
-			this.calculateDcChargeEnergy.update(null);
-			this.calculateDcDischargeEnergy.update(null);
 		} else if (activePower > 0) {
 				// Discharge
 				this.calculateAcChargeEnergy.update(0);
 				this.calculateAcDischargeEnergy.update(activePower);
-				this.calculateDcChargeEnergy.update(0);
-				this.calculateDcDischargeEnergy.update(activePower);
 		} else {
 			// Charge
 			this.calculateAcChargeEnergy.update(activePower * -1);
 			this.calculateAcDischargeEnergy.update(0);
-			this.calculateDcChargeEnergy.update(activePower * -1);
-			this.calculateDcDischargeEnergy.update(0);
 		}
 	}
 	
