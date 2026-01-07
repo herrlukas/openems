@@ -42,10 +42,6 @@ public class EssSolplanetImpl extends AbstractOpenemsComponent
 			SymmetricEss.ChannelId.ACTIVE_CHARGE_ENERGY);
 	private final CalculateEnergyFromPower calculateAcDischargeEnergy = new CalculateEnergyFromPower(this,
 			SymmetricEss.ChannelId.ACTIVE_DISCHARGE_ENERGY);
-	private final CalculateEnergyFromPower calculateDcChargeEnergy = new CalculateEnergyFromPower(this,
-			HybridEss.ChannelId.DC_CHARGE_ENERGY);
-	private final CalculateEnergyFromPower calculateDcDischargeEnergy = new CalculateEnergyFromPower(this,
-			HybridEss.ChannelId.DC_DISCHARGE_ENERGY);
 	
 	@Reference
 	private ConfigurationAdmin cm;
