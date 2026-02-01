@@ -1,2 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/io/openems/edge/shelly/shellypmmini/Config.java=UTF-8
+encoding//src/io/openems/edge/shelly/shellypmmini/IoShellyPMMini.java=UTF-8
+encoding//src/io/openems/edge/shelly/shellypmmini/IoShellyPMMiniImpl.java=UTF-8
 encoding/<project>=UTF-8
