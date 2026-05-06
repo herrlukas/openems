@@ -83,10 +83,10 @@ public class CoreSolplanetImpl extends AbstractOpenemsComponent implements CoreS
 		this.disableCertificateValidation();
 		String url = this.buildURL(4);
 		final var cycleService = this.httpBridge.createService(this.httpBridgeCycleServiceDefinition);
-		cycleService.subscribeJsonCycle(10, url, this::processHttpResultInvEss);
+		cycleService.subscribeJsonEveryCycle(url, this::processHttpResultInvEss);
 		
 		url = this.buildURL(3);
-		cycleService.subscribeJsonCycle(10, url, this::processHttpResultGrid);
+		cycleService.subscribeJsonEveryCycle(url, this::processHttpResultGrid);
 	}
 
 	@Deactivate
