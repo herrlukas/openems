@@ -1,4 +1,4 @@
-package io.openems.edge.shelly.shellypmmini;
+package io.openems.edge.io.shelly.shellypmmini;
 
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;

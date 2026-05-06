@@ -1,4 +1,4 @@
-package io.openems.edge.shelly.shellypmmini;
+package io.openems.edge.io.shelly.shellypmmini;
 
 import static io.openems.common.utils.JsonUtils.getAsBoolean;
 import static io.openems.common.utils.JsonUtils.getAsFloat;
